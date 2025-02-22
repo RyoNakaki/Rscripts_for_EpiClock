@@ -25,12 +25,21 @@ getBM_with_retry <- function(attributes, filters, values, mart, max_attempts = 1
 }
 
 # パス情報の指定
-output_dir_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/custom/output/"
-input_data_path <- "/Users/nakaki/Analysis/epiclock/concat_beta_matrix/custom/beta_matrix.txt"
-sample_list_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/custom/sample_list.csv"
-ref_custom_array_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/custom/refs/RhelixaMethylEpiclockV1_SS_20042798X391986_A1_All.csv" # カスタムアレイ用manifestファイル
-ref_ewas_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/custom/refs/EWAS_Atlas_traits.tsv"
-ref_ensembl_mart_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/custom/refs/ensembl_mart.rds"
+# EPIC用のパス指定
+output_dir_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/EPIC/output/"
+input_data_path <- "/Users/nakaki/Analysis/epiclock/concat_beta_matrix/EPIC/beta_matrix.txt"
+sample_list_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/EPIC/sample_list.csv"
+ref_custom_array_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/refs/EPIC-8v2-0_A2.csv" # EPIC用manifestファイル
+ref_ewas_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/refs/EWAS_Atlas_traits.tsv"
+ref_ensembl_mart_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/refs/ensembl_mart.rds"
+
+# カスタムアレイ用のパス指定
+# output_dir_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/custom/output/"
+# input_data_path <- "/Users/nakaki/Analysis/epiclock/concat_beta_matrix/custom/beta_matrix.txt"
+# sample_list_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/custom/sample_list.csv"
+# ref_custom_array_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/refs/RhelixaMethylEpiclockV1_SS_20042798X391986_A1_All.csv" # カスタムアレイ用manifestファイル
+# ref_ewas_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/refs/EWAS_Atlas_traits.tsv"
+# ref_ensembl_mart_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/refs/ensembl_mart.rds"
 
 # vroom を使ってデータを読み込む
 beta_matrix <- vroom(file = input_data_path, delim = "\t", col_names = TRUE)
