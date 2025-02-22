@@ -14,7 +14,9 @@ csv_files <- c(
   "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0006/age_matrix_EPAS0006.csv"
 )
 
-output_file <- "/Users/nakaki/Analysis/epiclock/custom/concat_age_matrix/age_matrix.csv"
+# 出力ファイルのパスを指定
+# output_file <- "/Users/nakaki/Analysis/epiclock/concat_age_matrix/custom/age_matrix.csv"
+output_file <- "/Users/nakaki/Analysis/epiclock/concat_age_matrix/EPIC/age_matrix.csv"
 
 # 読み込んだデータを格納するリスト
 data_list <- list()
