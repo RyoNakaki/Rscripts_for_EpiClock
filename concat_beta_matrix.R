@@ -11,7 +11,6 @@ file_list <- c(
   "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0006/beta_matrix_EPAS0006.txt"
 )
 
-#バージョン管理テスト用
 # 出力ファイルのパスを指定
 output_file <- "/Users/nakaki/Analysis/epiclock/custom/concat_beta_matrix/beta_matrix.txt"
 
