@@ -12,7 +12,8 @@ file_list <- c(
 )
 
 # 出力ファイルのパスを指定
-output_file <- "/Users/nakaki/Analysis/epiclock/custom/concat_beta_matrix/beta_matrix.txt"
+# output_file <- "/Users/nakaki/Analysis/epiclock/concat_beta_matrix/custom/beta_matrix.txt"
+output_file <- "/Users/nakaki/Analysis/epiclock/concat_beta_matrix/EPIC/beta_matrix.txt"
 
 # データを格納するリストを作成
 data_list <- list()
