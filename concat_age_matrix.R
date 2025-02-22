@@ -6,12 +6,12 @@ if (!require("data.table")) {
 
 # 絶対パスで指定するCSVファイルのリスト
 csv_files <- c(
-  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0001/age_matrix_EPAS0001.csv",
-  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0002/age_matrix_EPAS0002.csv",
-  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0003/age_matrix_EPAS0003.csv",
-  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0004/age_matrix_EPAS0004.csv",
-  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0005/age_matrix_EPAS0005.csv",
-  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0006/age_matrix_EPAS0006.csv"
+  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/EPAS0001/age_matrix_EPAS0001.csv",
+  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/EPAS0002/age_matrix_EPAS0002.csv",
+  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/EPAS0003/age_matrix_EPAS0003.csv",
+  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/EPAS0004/age_matrix_EPAS0004.csv",
+  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/EPAS0005/age_matrix_EPAS0005.csv",
+  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/EPAS0006/age_matrix_EPAS0006.csv"
 )
 
 # 出力ファイルのパスを指定
