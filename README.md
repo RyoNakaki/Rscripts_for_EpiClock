@@ -1,0 +1,2 @@
+# Rscripts_for_EpiClock
+EpiClockプロジェクトで使用するRスクリプト一式
