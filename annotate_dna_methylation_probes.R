@@ -25,18 +25,11 @@ getBM_with_retry <- function(attributes, filters, values, mart, max_attempts = 1
 }
 
 # パス情報の指定
-
-# output_dir_path <- "/Users/nakaki/data/annotate_custom_array/20241227/"
-# input_data_path <- "/Users/nakaki/data/annotate_custom_array/20241227/beta_matrix.txt"
-# ref_custom_array_path <- "/Users/nakaki/data/annotate_custom_array/ref/MethylationEPICv2.0/EPIC-8v2-0_A2.csv"
-# ref_ewas_path <- "/Users/nakaki/data/20241202_edit_ewas/EWAS_Atlas_traits.tsv"
-# ref_ensembl_mart_path <- "/Users/nakaki/data/20241113_custom_array/refs/ensembl_mart.rds"
-
-output_dir_path <- "/Users/nakaki/data/annotate_custom_array/20250217/"
-input_data_path <- "/Users/nakaki/data/annotate_custom_array/20250217/beta_matrix.txt"
-ref_custom_array_path <- "/Users/nakaki/data/20241113_custom_array/refs/RhelixaMethylEpiclockV1_SS_20042798X391986_A1_All.csv" # カスタムアレイ用manifestファイル
-ref_ewas_path <- "/Users/nakaki/data/20241202_edit_ewas/EWAS_Atlas_traits.tsv"
-ref_ensembl_mart_path <- "/Users/nakaki/data/20241113_custom_array/refs/ensembl_mart.rds"
+output_dir_path <- "/Users/nakaki/Analysis/epiclock/custom/annotate_dna_methylation_probes/output/"
+input_data_path <- "/Users/nakaki/Analysis/epiclock/custom/concat_beta_matrix/beta_matrix.txt"
+ref_custom_array_path <- "/Users/nakaki/Analysis/epiclock/custom/annotate_dna_methylation_probes/refs/RhelixaMethylEpiclockV1_SS_20042798X391986_A1_All.csv" # カスタムアレイ用manifestファイル
+ref_ewas_path <- "/Users/nakaki/Analysis/epiclock/custom/annotate_dna_methylation_probes/refs/EWAS_Atlas_traits.tsv"
+ref_ensembl_mart_path <- "/Users/nakaki/Analysis/epiclock/custom/annotate_dna_methylation_probes/refs/ensembl_mart.rds"
 
 # vroom を使ってデータを読み込む
 beta_matrix <- vroom(file = input_data_path, delim = "\t", col_names = TRUE)
