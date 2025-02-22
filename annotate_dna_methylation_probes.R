@@ -25,14 +25,18 @@ getBM_with_retry <- function(attributes, filters, values, mart, max_attempts = 1
 }
 
 # パス情報の指定
-output_dir_path <- "/Users/nakaki/Analysis/epiclock/custom/annotate_dna_methylation_probes/output/"
-input_data_path <- "/Users/nakaki/Analysis/epiclock/custom/concat_beta_matrix/beta_matrix.txt"
-ref_custom_array_path <- "/Users/nakaki/Analysis/epiclock/custom/annotate_dna_methylation_probes/refs/RhelixaMethylEpiclockV1_SS_20042798X391986_A1_All.csv" # カスタムアレイ用manifestファイル
-ref_ewas_path <- "/Users/nakaki/Analysis/epiclock/custom/annotate_dna_methylation_probes/refs/EWAS_Atlas_traits.tsv"
-ref_ensembl_mart_path <- "/Users/nakaki/Analysis/epiclock/custom/annotate_dna_methylation_probes/refs/ensembl_mart.rds"
+output_dir_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/custom/output/"
+input_data_path <- "/Users/nakaki/Analysis/epiclock/concat_beta_matrix/custom/beta_matrix.txt"
+sample_list_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/custom/sample_list.csv"
+ref_custom_array_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/custom/refs/RhelixaMethylEpiclockV1_SS_20042798X391986_A1_All.csv" # カスタムアレイ用manifestファイル
+ref_ewas_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/custom/refs/EWAS_Atlas_traits.tsv"
+ref_ensembl_mart_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/custom/refs/ensembl_mart.rds"
 
 # vroom を使ってデータを読み込む
 beta_matrix <- vroom(file = input_data_path, delim = "\t", col_names = TRUE)
+
+# sample_list.csv を読み込み、1列目の内容をベクターとして取得
+sample_list <- read.csv(sample_list_path, header = TRUE, stringsAsFactors = FALSE)[[1]]
 
 # データを data.frame に変換しつつ、1列目を行名として設定
 beta_matrix <- as.data.frame(beta_matrix)  # tibble から data.frame に変換
@@ -95,6 +99,12 @@ colnames(ref_ewas)[1] <- "Probe_ID"
 
 # サンプルごとにデータを出力
 for (sample in colnames(beta_matrix)) {
+  # sample が sample_list に含まれていない場合はスキップ
+  if (!(sample %in% sample_list)) {
+    cat("Skip: ", sample, "\n")
+    next
+  }
+  
   cat("Sample: ", sample, "\n")
   
   # 各サンプル列をデータフレームに変換
