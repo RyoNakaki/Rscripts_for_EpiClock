@@ -3,12 +3,12 @@ library(dplyr)
 
 # 結合対象のタブ区切りテキストファイルのパスリストを指定
 file_list <- c(
-  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0001/beta_matrix_EPAS0001.txt",
-  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0002/beta_matrix_EPAS0002.txt",
-  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0003/beta_matrix_EPAS0003.txt",
-  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0004/beta_matrix_EPAS0004.txt",
-  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0005/beta_matrix_EPAS0005.txt",
-  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/raw/EPAS0006/beta_matrix_EPAS0006.txt"
+  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/EPAS0001/beta_matrix_EPAS0001.txt",
+  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/EPAS0002/beta_matrix_EPAS0002.txt",
+  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/EPAS0003/beta_matrix_EPAS0003.txt",
+  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/EPAS0004/beta_matrix_EPAS0004.txt",
+  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/EPAS0005/beta_matrix_EPAS0005.txt",
+  "/Users/nakaki/Library/CloudStorage/GoogleDrive-nakaki@rhelixa.com/マイドライブ/Data/epiclock/custom/EPAS0006/beta_matrix_EPAS0006.txt"
 )
 
 # 出力ファイルのパスを指定
