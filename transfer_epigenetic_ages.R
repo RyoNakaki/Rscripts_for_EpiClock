@@ -217,46 +217,10 @@ transform_and_plot_linear <- function(output_file_path, df, column_name_x, colum
 ########################################
 
 # パス情報の指定
-# job_id <- "20241126"
-# output_dir_path <- "/Users/nakaki/data/transfer_clock/demo/"
-# input_data_path <- "/Users/nakaki/data/transfer_clock/demo/raw_values.csv"
-# input_list_path <- "/Users/nakaki/data/transfer_clock/demo/sample_list.csv"
-
-# job_id <- "20241227_zscore"
-# output_dir_path <- "/Users/nakaki/data/transfer_clock/20241227/"
-# input_data_path <- "/Users/nakaki/data/transfer_clock/20241227/raw_values.csv"
-# input_list_path <- "/Users/nakaki/data/transfer_clock/20241227/sample_list.csv"
-# input_list_path <- "/Users/nakaki/data/transfer_clock/20241227/sample_list_kazu.csv"
-
-# job_id <- "20250109_raw"
-# output_dir_path <- "/Users/nakaki/data/transfer_clock/20250109/"
-# input_data_path <- "/Users/nakaki/data/transfer_clock/20250109/raw_values.csv"
-# input_list_path <- "/Users/nakaki/data/transfer_clock/20250109/sample_list.csv"
-
-# job_id <- "20250110_zscore"
-# output_dir_path <- "/Users/nakaki/data/transfer_clock/20241227_2/"
-# input_data_path <- "/Users/nakaki/data/transfer_clock/20241227_2/raw_values.csv"
-# input_list_path <- "/Users/nakaki/data/transfer_clock/20241227_2/sample_list.csv"
-
-# job_id <- "20250120_raw"
-# output_dir_path <- "/Users/nakaki/data/transfer_clock/20250120/"
-# input_data_path <- "/Users/nakaki/data/transfer_clock/20250120/raw_values.csv"
-# input_list_path <- "/Users/nakaki/data/transfer_clock/20250120/sample_list.csv"
-
-# job_id <- "20250127_raw"
-# output_dir_path <- "/Users/nakaki/data/transfer_clock/20250127/"
-# input_data_path <- "/Users/nakaki/data/transfer_clock/20250127/raw_values.csv"
-# input_list_path <- "/Users/nakaki/data/transfer_clock/20250127/sample_list.csv"
-
-# job_id <- "20250217_zscore"
-# output_dir_path <- "/Users/nakaki/data/transfer_clock/20250217/"
-# input_data_path <- "/Users/nakaki/data/transfer_clock/20250217/raw_values.csv"
-# input_list_path <- "/Users/nakaki/data/transfer_clock/20250217/sample_list.csv"
-
-job_id <- "20250218_raw"
-output_dir_path <- "/Users/nakaki/data/transfer_clock/20250218/"
-input_data_path <- "/Users/nakaki/data/transfer_clock/20250218/raw_values.csv"
-input_list_path <- "/Users/nakaki/data/transfer_clock/20250218/sample_list.csv"
+job_id <- "20250223_raw"
+output_dir_path <- "/Users/nakaki/Analysis/epiclock/transfer_epigenetic_ages/custom/output/"
+input_data_path <- "/Users/nakaki/Analysis/epiclock/concat_age_matrix/custom/age_matrix.csv"
+input_list_path <- "/Users/nakaki/Analysis/epiclock/transfer_epigenetic_ages/sample_llist.csv"
 
 
 # インプットデータを読み込む
