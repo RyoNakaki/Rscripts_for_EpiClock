@@ -56,12 +56,12 @@ make_scatter_plot <- function(output_file_path, df, column_name_x, column_name_y
 }
 
 # 数値変換とスキャッタープロット作成を続けて実施
-transform_and_plot <- function(output_file_path, df, column_name_x, column_name_y, output_name_x, output_name_y, mean_ref, sd_ref) {
+transform_and_plot <- function(output_file_path, df, column_name_x, column_name_y, new_column_name_y, output_name_x, output_name_y, mean_ref, sd_ref) {
   # ①  数値変換
   df <- add_transformed_column(
     df <- df,
     column_name <- column_name_y,
-    new_column_name <- gsub("__c", "_t__c", column_name_y),
+    new_column_name <- new_column_name_y,
     mean_ref <- mean_ref,
     sd_ref <- sd_ref
   )
@@ -71,7 +71,7 @@ transform_and_plot <- function(output_file_path, df, column_name_x, column_name_
     output_file_path <- output_file_path,
     df <- df,
     column_name_x <- column_name_x,
-    column_name_y <- gsub("__c", "_t__c", column_name_y),
+    column_name_y <- new_column_name_y,
     output_name_x <- output_name_x,
     output_name_y <- output_name_y,
     mean_ref <- mean_ref,
@@ -120,7 +120,7 @@ run_elasticnet <- function(df, column_name_x, column_name_y) {
 }
 
 # 線形に相関する要素間のスキャッタープロットの作成
-transform_and_plot_linear <- function(output_file_path, df, column_name_x, column_name_y, output_name_x, output_name_y, fit, norm) {
+transform_and_plot_linear <- function(output_file_path, df, column_name_x, column_name_y, new_column_name_y, output_name_x, output_name_y, fit, norm) {
   x <- as.matrix(cbind(df[[column_name_x]], rep(1, nrow(df))))
   
   # 近似直線の計算
@@ -164,10 +164,10 @@ transform_and_plot_linear <- function(output_file_path, df, column_name_x, colum
     sd <- sd(diff, na.rm = TRUE)     # 標準偏差
     
     # mean_dbを平均、sd_dbを標準偏差とする正規分布に当てはめ変換して、データフレームに新しい列として追加
-    df[[gsub("__c", "_t__c", column_name_y)]] <- (diff - mean) / sd
+    df[[new_column_name_y]] <- (diff - mean) / sd
     
     # ggplot2でスキャッタープロットと近似直線を作成 (変換後)
-    p <- ggplot(df, aes(x = df[, column_name_x], y = df[, gsub("__c", "_t__c", column_name_y)], color = Highlight)) +
+    p <- ggplot(df, aes(x = df[, column_name_x], y = df[, new_column_name_y], color = Highlight)) +
       geom_point(size = 2) +                      # 点を描画
       geom_abline(intercept = 0.0, slope = 0,        # 平均線を追加
                   linetype = "dashed", color = "blue", size = 1) +
@@ -186,10 +186,10 @@ transform_and_plot_linear <- function(output_file_path, df, column_name_x, colum
       ) +
       theme_minimal()
   } else{
-    df[[gsub("__c", "_t__c", column_name_y)]] <- df[[column_name_y]] - (slope * df[[column_name_x]] + intercept) + df[[column_name_x]]
+    df[[new_column_name_y]] <- df[[column_name_y]] - (slope * df[[column_name_x]] + intercept) + df[[column_name_x]]
     
     # ggplot2でスキャッタープロットと近似直線を作成 (変換後)
-    p <- ggplot(df, aes(x = df[, column_name_x], y = df[, gsub("__c", "_t__c", column_name_y)], color = Highlight)) +
+    p <- ggplot(df, aes(x = df[, column_name_x], y = df[, new_column_name_y], color = Highlight)) +
       geom_point(size = 2) +                       # 元のデータポイント
       geom_abline(intercept = 0, slope = 1,        # 切片0、傾き1の直線を追加
                   linetype = "dashed", color = "blue", size = 1) +
@@ -235,145 +235,143 @@ df[["Highlight"]] <- ifelse(df[["Name"]] %in% sample_list[["Name"]], "Highlight"
 # 結果の変換と出力（男女差なし）
 ########################################
 
-# Hoverathクロック結果の変換と出力
-#df <- transform_and_plot_linear(
-#  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_HorvathClock.png"),
-#  df <- df,
-#  column_name_x <- "ChronologicalAge__c",
-#  column_name_y <- "DNAmHorvathClock__c",
-#  output_name_x <- "Chronological Age",
-#  output_name_y <- "Horvath Clock",
-#  fit <- run_elasticnet(df, "ChronologicalAge__c", "DNAmHorvathClock__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
-#  norm <- 0
-#)
-
-# PC Hoverathクロック結果の変換と出力
-#df <- transform_and_plot_linear(
-#  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_PCHorvathClock.png"),
-#  df <- df,
-#  column_name_x <- "ChronologicalAge__c",
-#  column_name_y <- "DNAmPCHorvathClock__c",
-#  output_name_x <- "Chronological Age",
-#  output_name_y <- "Horvath Clock",
-#  fit <- run_elasticnet(df, "ChronologicalAge__c", "DNAmPCHorvathClock__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
-#  norm <- 0
-#)
-
-# EpiClockAge結果の変換と出力
+# EpiClockAge値の変換と出力（フィッティング後）
 df <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_EpiClockAge.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_EpiClockAge_t.png"),
   df <- df,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmEpiclockAge__c",
+  new_column_name_y <- "DNAmEpiclockAge_t__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "EpiClockAge",
   fit <- run_elasticnet(df, "ChronologicalAge__c", "DNAmEpiclockAge__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 0
-  # norm <- 1
 )
 
-# FitAge結果の変換と出力
+# EpiClockAge値の変換と出力（Z-score）
 df <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_FitAge.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_EpiClockAge_z.png"),
+  df <- df,
+  column_name_x <- "ChronologicalAge__c",
+  column_name_y <- "DNAmEpiclockAge__c",
+  new_column_name_y <- "DNAmEpiclockAge_z__c",
+  output_name_x <- "Chronological Age",
+  output_name_y <- "EpiClockAge",
+  fit <- run_elasticnet(df, "ChronologicalAge__c", "DNAmEpiclockAge__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
+  norm <- 1
+)
+
+# FitAge値の変換と出力
+df <- transform_and_plot_linear(
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_FitAge_z.png"),
   df <- df,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmFitAge__c",
+  new_column_name_y <- "DNAmFitAge_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "FitAge",
   fit <- run_elasticnet(df, "ChronologicalAge__c", "DNAmFitAge__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# ADM結果の変換と出力
+# ADM値の変換と出力
 df <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmADM.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmADM_z.png"),
   df <- df,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmADM__c",
+  new_column_name_y <- "DNAmADM_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "ADM",
   fit <- run_elasticnet(df, "ChronologicalAge__c", "DNAmADM__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# B2M結果の変換と出力
+# B2M値の変換と出力
 df <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmB2M.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmB2M_z.png"),
   df <- df,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmB2M__c",
+  new_column_name_y <- "DNAmB2M_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "B2M",
   fit <- run_elasticnet(df, "ChronologicalAge__c", "DNAmB2M__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# CystatinC結果の変換と出力
+# CystatinC値の変換と出力
 df <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmCystatinC.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmCystatinC_z.png"),
   df <- df,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmCystatinC__c",
+  new_column_name_y <- "DNAmCystatinC_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "CystatinC",
   fit <- run_elasticnet(df, "ChronologicalAge__c", "DNAmCystatinC__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# CystatinC結果の変換と出力
+# GDF15値の変換と出力
 df <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmGDF15.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmGDF15_z.png"),
   df <- df,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmGDF15__c",
+  new_column_name_y <- "DNAmGDF15_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "GDF15",
   fit <- run_elasticnet(df, "ChronologicalAge__c", "DNAmGDF15__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# TIMP1結果の変換と出力
+# TIMP1値の変換と出力
 df <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmTIMP1.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmTIMP1_z.png"),
   df <- df,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmTIMP1__c",
+  new_column_name_y <- "DNAmTIMP1_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "TIMP1",
   fit <- run_elasticnet(df, "ChronologicalAge__c", "DNAmTIMP1__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# FRS結果の変換と出力
+# FRS値の変換と出力
 df <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmFRS.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmFRS_z.png"),
   df <- df,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmFRS__c",
+  new_column_name_y <- "DNAmFRS_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "FRS",
   fit <- run_elasticnet(df, "ChronologicalAge__c", "DNAmFRS__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# PACKYRS結果の変換と出力
+# PACKYRS値の変換と出力
 df <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmPACKYRS.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmPACKYRS_z.png"),
   df <- df,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmPACKYRS__c",
+  new_column_name_y <- "DNAmPACKYRS_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "PACKYRS",
   fit <- run_elasticnet(df, "ChronologicalAge__c", "DNAmPACKYRS__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# Hb1AC結果の変換と出力
+# Hb1AC値の変換と出力
 df <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmlogA1C.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmlogA1C_z.png"),
   df <- df,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmlogA1C__c",
+  new_column_name_y <- "DNAmlogA1C_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "logA1C",
   fit <- run_elasticnet(df, "ChronologicalAge__c", "DNAmlogA1C__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
@@ -383,6 +381,7 @@ df <- transform_and_plot_linear(
 
 # クロックリストの作成
 clock_list <- c(
+  "DNAmDunedinPACE",
   "DNAmDunedinPACE",
   "DNAmLeptin",
   "DNAmPAI1",
@@ -397,7 +396,8 @@ clock_list <- c(
 
 # 平均値リストの作成
 mean_list <- c(
-  1.0, # 0.0,
+  1.0,
+  0.0,
   0.0,
   0.0,
   0.0,
@@ -411,7 +411,8 @@ mean_list <- c(
 
 # 標準偏差リストの作成
 sd_list <- c(
-  0.1, # 1.0,
+  0.1,
+  1.0,
   1.0,
   1.0,
   1.0,
@@ -425,16 +426,31 @@ sd_list <- c(
 
 # 全サンプルを対象に計算
 for (i in seq_along(clock_list)) {
-  df <- transform_and_plot(
-    output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_", clock_list[i], ".png"),
-    df <- df,
-    column_name_x <- "ChronologicalAge__c",
-    column_name_y <- paste0(clock_list[i], "__c"),
-    output_name_x <- "Chronological Age",
-    output_name_y <- paste0(clock_list[i], " (transformed)"),
-    mean_ref <- mean_list[i],
-    sd_ref <- sd_list[i]
-  )
+  if(mean_list[i] == 0.0 & sd_list[i] == 1.0 ) {
+    df <- transform_and_plot(
+      output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_", clock_list[i], "_z.png"),
+      df <- df,
+      column_name_x <- "ChronologicalAge__c",
+      column_name_y <- paste0(clock_list[i], "__c"),
+      new_column_name_y <- paste0(clock_list[i], "_z__c"),
+      output_name_x <- "Chronological Age",
+      output_name_y <- paste0(clock_list[i], " (transformed)"),
+      mean_ref <- mean_list[i],
+      sd_ref <- sd_list[i]
+    )
+  } else{
+    df <- transform_and_plot(
+      output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_", clock_list[i], "_t.png"),
+      df <- df,
+      column_name_x <- "ChronologicalAge__c",
+      column_name_y <- paste0(clock_list[i], "__c"),
+      new_column_name_y <- paste0(clock_list[i], "_t__c"),
+      output_name_x <- "Chronological Age",
+      output_name_y <- paste0(clock_list[i], " (transformed)"),
+      mean_ref <- mean_list[i],
+      sd_ref <- sd_list[i]
+    )
+  }
 }
 
 
@@ -446,120 +462,130 @@ for (i in seq_along(clock_list)) {
 df_male <- df[df[["Sex__c"]] == "Male", ]  # 男性に該当するサンプルを抽出
 df_female <- df[df[["Sex__c"]] == "Female", ]  # 女性に該当するサンプルを抽出
 
-# Gait結果の変換と出力（男性）
+# Gait値の変換と出力（男性）
 df_male <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmGait_Male.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmGait_Male_z.png"),
   df <- df_male,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmGait__c",
+  new_column_name_y <- "DNAmGait_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "Gait",
   fit <- run_elasticnet(df_male, "ChronologicalAge__c", "DNAmGait__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# Grip結果の変換と出力（男性）
+# Grip値の変換と出力（男性）
 df_male <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmGrip_Male.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmGrip_Male_z.png"),
   df <- df_male,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmGrip__c",
+  new_column_name_y <- "DNAmGrip_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "Grip",
   fit <- run_elasticnet(df_male, "ChronologicalAge__c", "DNAmGrip__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# VO2結果の変換と出力（男性）
+# VO2値の変換と出力（男性）
 df_male <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmVO2_Male.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmVO2_Male_z.png"),
   df <- df_male,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmVO2__c",
+  new_column_name_y <- "DNAmVO2_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "VO2",
   fit <- run_elasticnet(df_male, "ChronologicalAge__c", "DNAmVO2__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# FEV1結果の変換と出力（男性）
+# FEV1値の変換と出力（男性）
 df_male <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmFEV1_Male.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmFEV1_Male_z.png"),
   df <- df_male,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmFEV1__c",
+  new_column_name_y <- "DNAmFEV1_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "FEV1",
   fit <- run_elasticnet(df_male, "ChronologicalAge__c", "DNAmFEV1__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# TL結果の変換と出力（男性）
+# TL値の変換と出力（男性）
 df_male <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmTL_Male.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmTL_Male_z.png"),
   df <- df_male,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmTL__c",
+  new_column_name_y <- "DNAmTL_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "TL",
   fit <- run_elasticnet(df_male, "ChronologicalAge__c", "DNAmTL__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# Gait結果の変換と出力（女性）
+# Gait値の変換と出力（女性）
 df_female <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmGait_Female.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmGait_Female_z.png"),
   df <- df_female,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmGait__c",
+  new_column_name_y <- "DNAmGait_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "Gait",
   fit <- run_elasticnet(df_female, "ChronologicalAge__c", "DNAmGait__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# Grip結果の変換と出力（女性）v
+# Grip値の変換と出力（女性）
 df_female <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmGrip_Female.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmGrip_Female_z.png"),
   df <- df_female,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmGrip__c",
+  new_column_name_y <- "DNAmGrip_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "Grip",
   fit <- run_elasticnet(df_female, "ChronologicalAge__c", "DNAmGrip__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# VO2結果の変換と出力（女性）
+# VO2値の変換と出力（女性）
 df_female <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmVO2_Female.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmVO2_Female_z.png"),
   df <- df_female,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmVO2__c",
+  new_column_name_y <- "DNAmVO2_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "VO2",
   fit <- run_elasticnet(df_female, "ChronologicalAge__c", "DNAmVO2__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# FEV1結果の変換と出力（女性）
+# FEV1値の変換と出力（女性）
 df_female <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmFEV1_Female.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmFEV1_Female_z.png"),
   df <- df_female,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmFEV1__c",
+  new_column_name_y <- "DNAmFEV1_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "FEV1",
   fit <- run_elasticnet(df_female, "ChronologicalAge__c", "DNAmFEV1__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
   norm <- 1
 )
 
-# TL結果の変換と出力（女性）
+# TL値の変換と出力（女性）
 df_female <- transform_and_plot_linear(
-  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmTL_Female.png"),
+  output_file_path <- paste0(output_dir_path, job_id, "_scatter_plot_DNAmTL_Female_z.png"),
   df <- df_female,
   column_name_x <- "ChronologicalAge__c",
   column_name_y <- "DNAmTL__c",
+  new_column_name_y <- "DNAmTL_z__c",
   output_name_x <- "Chronological Age",
   output_name_y <- "TL",
   fit <- run_elasticnet(df_female, "ChronologicalAge__c", "DNAmTL__c"), # ElasticNetで学習をさせ、最適な切片と傾きを取得
