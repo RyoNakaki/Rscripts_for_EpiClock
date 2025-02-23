@@ -6,6 +6,10 @@ library(org.Hs.eg.db)
 library(biomaRt)
 library(vroom)
 
+########################################
+# 関数を定義
+########################################
+
 # getBMをリトライする関数
 getBM_with_retry <- function(attributes, filters, values, mart, max_attempts = 10, delay = 5) {
   attempt <- 1
@@ -24,6 +28,11 @@ getBM_with_retry <- function(attributes, filters, values, mart, max_attempts = 1
   stop("getBMが", max_attempts, "回失敗しました。処理を中断します。")
 }
 
+
+########################################
+# データの入出力先の指定と読み込み
+########################################
+
 # パス情報の指定
 # EPIC用のパス指定
 output_dir_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/EPIC/output/"
@@ -40,6 +49,11 @@ ref_ensembl_mart_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylati
 # ref_custom_array_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/refs/RhelixaMethylEpiclockV1_SS_20042798X391986_A1_All.csv" # カスタムアレイ用manifestファイル
 # ref_ewas_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/refs/EWAS_Atlas_traits.tsv"
 # ref_ensembl_mart_path <- "/Users/nakaki/Analysis/epiclock/annotate_dna_methylation_probes/refs/ensembl_mart.rds"
+
+
+########################################
+# プローブの選別とアノテーション
+########################################
 
 # vroom を使ってデータを読み込む
 beta_matrix <- vroom(file = input_data_path, delim = "\t", col_names = TRUE)
